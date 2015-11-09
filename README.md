@@ -1,2 +1,0 @@
-# yarkcy.github.io
-blog
