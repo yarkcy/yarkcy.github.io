@@ -1,0 +1,23 @@
+---
+layout: post
+categories: machine-learning
+---
+
+# Softmax
+
+### 简介
+
+* Softmax回归模型是logistic回归模型在多分类问题上的推广，类标签$y$可以取两个以上的值。
+* Softmax回归是有监督的。
+* hypothesis function:
+$$h_\theta (x) = \frac{ 1 }{ 1 + \mathrm{exp}(-\theta^T x)}$$
+训练模型参数$$\theta$$，最小化cost function:$$J(\theta) = -\frac{ 1 }{ m } \left[ \sum_{i = 1}^m y^{(i)} \mathrm{log}h_\theta (x^{(i)}) + (1-y^{(i)}) \mathrm{log} (1-h_\theta (x^{(i)})) \right]$$
+* 对于训练集$${(x^{(1)},y^{(1)}),\dots,(x^{(m)},y^{(1)})}$$，有$$y^{(i)} \in {1,2,\dots,k}$$。假设函数针对每一个类别$$j$$估算出概率值$$p(y=j\mid x)$$。所以假设函数将要输出一个$$k$$维的向量表示概率值。假设函数形式如下：$$h_\theta (x^{(i)}) = \left[ \begin{array}{c} p(y^{(i)} = 1\mid x^{(i)};\theta) \\ p(y^{(i)} = 2\mid x^{(i)};\theta) \\ \vdots \\ p(y^{(i)} = k\mid x^{(i)};\theta) \end{array} \right] = \frac{1}{\sum_{j=1}^{k}e^{\theta_j ^T x^{(i)}}} \left[ \begin{array}{c} e^{\theta_1 ^T x^{(i)}} \\ e^{\theta_2 ^T x^{(i)}} \\ \vdots \\ e^{\theta_k ^T x^{(i)}} \end{array} \right]$$其中$$\theta_1,\theta_2,\dots,\theta_k \in \mathfrak{R}^{n+1}$$，$$\frac{1}{\sum_{j=1}^{k}e^{\theta_j^Tx{(i)}}}$$对概率分布归一化。
+* 代价函数
+$$J(\theta)=-\frac{1}{m}\left[\sum_{i=1}^{m}\sum_{j=1}^{k}\mathrm{1}\{y_{(i)}=j\}\mathrm{log}\frac{e^{\theta_j^Tx^{(i)}}}{\sum_{l=1}^{k}e^{\theta_l^Tx^{(i)}}}\right]$$
+其中$$\mathrm{1}\{exp\}=\left\{\begin{array}{ll} 1 & \textrm{if exp is true} \\ 0 & \textrm{if exp is false} \end{array} \right.$$
+$$p(y^{(i)}=j\mid x^{(i)};\theta)=\frac{e^{\theta_j^Tx^{(i)}}}{\sum_{l=1}^{k}e^{\theta_l^Tx^{(i)}}}$$
+
+* 梯度公式：$$\nabla_{\theta_j}J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}[x^{(i)}(1\{y^{(j)}=j\}-p(y^{(i)}=j\mid x^{(i)};\theta ))]$$
+
+* Softmax有一个“冗余”的参数集，从参数向量$$\theta_j$$中减去向量$$\psi$$假设函数$$p(y^{(i)}=j\mid x^{(i)};\theta)=\frac{e^{(\theta_j-\psi)^Tx^{(i)}}}{\sum_{l=1}{k}e^{(\theta_l-\psi)^Tx^{(i)}}}=\frac{e^{\theta_j^Tx^{(i)}}e^{-\psi^Tx^{(i)}}}{\sum_{l=1}{k}e^{\theta_l^Tx^{(i)}}e^{-\psi^Tx^{(i)}}}=\frac{e^{\theta_j^Tx^{(i)}}}{\sum_{l=1}{k}e^{\theta_l^Tx^{(i)}}}$$
